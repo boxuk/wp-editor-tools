@@ -1,0 +1,36 @@
+name: Test
+
+on: 
+  pull_request: 
+    branches: 
+      - main
+  
+permissions:
+  contents: write
+  pull-requests: write
+  checks: write
+  issues: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up PHP
+        uses: setup-php/setup-php@v2
+        with:
+          php-version: 8.2
+          extensions: pcov
+      - name: Install dependencies
+        run: composer install
+      - name: Run tests
+        run: composer run phpunit
+      - name: Run lint
+        run: composer run phpcs
+      - name: Run static analysis
+        run: composer run phpstan
