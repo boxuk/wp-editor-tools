@@ -38,7 +38,7 @@ $loader->load( 'index' ); // handle will be `my_plugin_asset_index`
 ```
 
 ### Localisation or Additional Data
-The loader can also inject any data in the the JS context for your script to use. 
+The loader can also inject any data in the JS context for your script to use. 
 See the [WordPress Docs for `wp_localize_script`](https://developer.wordpress.org/reference/functions/wp_localize_script/) for more context. 
 
 #### The object name
