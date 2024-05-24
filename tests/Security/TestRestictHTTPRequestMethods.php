@@ -23,7 +23,7 @@ class TestRestictHTTPRequestMethods extends TestCase {
 		
 		$class_in_test = new RestrictHTTPRequestMethods();
 
-		\WP_Mock::expectActionAdded( 'init', [ $class_in_test, 'block_request_if_not_using_allowed_method' ] );
+		\WP_Mock::expectActionAdded( 'init', array( $class_in_test, 'block_request_if_not_using_allowed_method' ) );
 
 		$class_in_test->init();
 
@@ -76,28 +76,28 @@ class TestRestictHTTPRequestMethods extends TestCase {
 	 * @return array
 	 */
 	public function block_request_if_not_using_allowed_method_provider(): array {
-		return [
+		return array(
 			// Non-CLI Requests should be allowed or blocked dependant on the request method.
-			[ 'POST', false, false ],
-			[ 'GET', false, false ],
-			[ 'PUT', false, false ],
-			[ 'PATCH', false, false ],
-			[ 'DELETE', false, false ],
-			[ 'HEAD', false, false ],
-			[ 'OPTIONS', false, false ],
-			[ 'PURGE', false, true ],
-			[ 'INVALID', false, true ],
+			array( 'POST', false, false ),
+			array( 'GET', false, false ),
+			array( 'PUT', false, false ),
+			array( 'PATCH', false, false ),
+			array( 'DELETE', false, false ),
+			array( 'HEAD', false, false ),
+			array( 'OPTIONS', false, false ),
+			array( 'PURGE', false, true ),
+			array( 'INVALID', false, true ),
 
 			// CLI Requests should always be allowed.
-			[ 'POST', true, false ],
-			[ 'GET', true, false ],
-			[ 'PUT', true, false ],
-			[ 'PATCH', true, false ],
-			[ 'DELETE', true, false ],
-			[ 'HEAD', true, false ],
-			[ 'OPTIONS', true, false ],
-			[ 'PURGE', true, false ],
-			[ 'INVALID', true, false ],
-		];
+			array( 'POST', true, false ),
+			array( 'GET', true, false ),
+			array( 'PUT', true, false ),
+			array( 'PATCH', true, false ),
+			array( 'DELETE', true, false ),
+			array( 'HEAD', true, false ),
+			array( 'OPTIONS', true, false ),
+			array( 'PURGE', true, false ),
+			array( 'INVALID', true, false ),
+		);
 	}
 }

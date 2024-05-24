@@ -1,7 +1,7 @@
 <?php
 /**
  * Post Type Management
- * 
+ *
  * @package Boxuk\BoxWpEditorTools
  */
 
@@ -15,46 +15,39 @@ namespace Boxuk\BoxWpEditorTools;
 class PostTypes {
 
 	/**
-	 * Constructor
-	 * 
-	 * @param string $path The path to the post types file.
-	 */
-	public function __construct( private string $path = '' ) {}
-
-	/**
 	 * Init Hooks
 	 */
 	public function init(): void {
-		add_action( 'init', [ $this, 'register_post_types' ] );
+		add_action( 'init', array( $this, 'register_post_types' ) );
 	}
 
 	/**
 	 * Register Post Types
-	 * 
+	 *
 	 * @return void
 	 */
 	public function register_post_types(): void {
 
-		$path = ! empty( $this->path ) ? $this->path : get_template_directory() . '/post-types.json';
+		$path = get_template_directory() . '/post-types.json';
 		if ( ! file_exists( $path ) ) {
 			return;
 		}
 		$file = file_get_contents( $path ); // phpcs:ignore WordPressVIPMinimum.Performance.FetchingRemoteData.FileGetContentsUnknown
-		$data = json_decode( $file ?: 'invalid file', true );
+		$data = json_decode( $file ? $file : 'invalid file', true );
 		if ( ! is_array( $data ) ) {
 			return;
 		}
 
-		foreach ( $data['post_types'] ?? [] as $name => $args ) {
+		foreach ( $data['post_types'] ?? array() as $name => $args ) {
 			$args = wp_parse_args(
 				$args,
-				[
+				array(
 					'show_in_rest' => true,
-					'public' => true,
-					'template' => $this->blocks_to_template( 
-						$this->get_blocks_from_file( $name ) ?? []
-					) ?? [],
-				]
+					'public'       => true,
+					'template'     => $this->blocks_to_template(
+						$this->get_blocks_from_file( $name ) ?? array()
+					) ?? array(),
+				)
 			);
 
 			register_post_type( $name, $args ); // phpcs:ignore WordPress.NamingConventions.ValidPostTypeSlug.NotStringLiteral
@@ -63,13 +56,13 @@ class PostTypes {
 
 	/**
 	 * Locate and Parse Template for Post Type
-	 * 
+	 *
 	 * @param string $name Post Type Name.
-	 * 
+	 *
 	 * @return array<array>|null
 	 * // @phpstan-ignore-next-line -- return shape can't be desribed for phpstan because it's recursive.
 	 */
-	public function get_blocks_from_file( string $name ): ?array { 
+	public function get_blocks_from_file( string $name ): ?array {
 
 		if ( ! is_admin() ) {
 			// Template is only used in the editor, so we don't need
@@ -88,15 +81,15 @@ class PostTypes {
 
 	/**
 	 * Transform Blocks to Template
-	 * 
+	 *
 	 * @param array<array> $blocks Blocks.
-	 * 
+	 *
 	 * @return ?array<array{string,array,?array<array>}>
 	 * // @phpstan-ignore-next-line -- return shape can't be desribed for phpstan because it's recursive.
 	 */
 	public function blocks_to_template( array $blocks ): ?array {
-		
-		$template = [];
+
+		$template = array();
 
 		foreach ( $blocks as $block ) {
 			$template[] = $this->block_to_template( $block );
@@ -107,9 +100,9 @@ class PostTypes {
 
 	/**
 	 * Convert a block to a template array
-	 * 
+	 *
 	 * @param array $block The block to convert.
-	 * 
+	 *
 	 * @return ?array{string,array,?array<array>}
 	 * // @phpstan-ignore-next-line -- return shape can't be desribed for phpstan because it's recursive.
 	 */
@@ -119,10 +112,10 @@ class PostTypes {
 			return null;
 		}
 
-		return [ 
-			$name, 
-			$block['attrs'] ?? [], 
-			$this->blocks_to_template( $block['innerBlocks'] ?? [] ),
-		];
+		return array(
+			$name,
+			$block['attrs'] ?? array(),
+			$this->blocks_to_template( $block['innerBlocks'] ?? array() ),
+		);
 	}
 }

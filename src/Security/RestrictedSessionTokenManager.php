@@ -21,7 +21,7 @@ class RestrictedSessionTokenManager extends \WP_User_Meta_Session_Tokens {
 	 */
 	protected function get_sessions(): array {
 		$sessions = parent::get_sessions();
-		$limit = UserSessions::get_session_limit();
+		$limit    = UserSessions::get_session_limit();
 
 		if ( 0 === $limit ) {
 			return $sessions;

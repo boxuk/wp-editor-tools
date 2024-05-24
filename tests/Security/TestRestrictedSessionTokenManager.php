@@ -42,11 +42,11 @@ class TestRestrictedSessionTokenManager extends TestCase {
 
 		// Reflect the class in test so we can access the protected method.
 		$reflected_class = new \ReflectionClass( RestrictedSessionTokenManager::class );
-		$method = $reflected_class->getMethod( 'get_sessions' );
+		$method          = $reflected_class->getMethod( 'get_sessions' );
 		$method->setAccessible( true );
 
 		$token_manager = new RestrictedSessionTokenManager( 1 );
-		$actual = $method->invokeArgs( $token_manager, [] );
+		$actual        = $method->invokeArgs( $token_manager, array() );
 		
 		$this->assertEquals( $expected, $actual );
 	}
@@ -57,49 +57,49 @@ class TestRestrictedSessionTokenManager extends TestCase {
 	 * @return array
 	 */
 	public function get_sessions_provider(): array {
-		return [
-			'no session limit' => [
-				'session_limit' => 0,
-				'existing_sessions' => [
-					[
-						'session_id' => 'session_id_1',
+		return array(
+			'no session limit' => array(
+				'session_limit'     => 0,
+				'existing_sessions' => array(
+					array(
+						'session_id'         => 'session_id_1',
 						'session_expiration' => 1,
-					],
-					[
-						'session_id' => 'session_id_2',
+					),
+					array(
+						'session_id'         => 'session_id_2',
 						'session_expiration' => 2,
-					],
-				],
-				'expected' => [
-					[
-						'session_id' => 'session_id_1',
+					),
+				),
+				'expected'          => array(
+					array(
+						'session_id'         => 'session_id_1',
 						'session_expiration' => 1,
-					],
-					[
-						'session_id' => 'session_id_2',
+					),
+					array(
+						'session_id'         => 'session_id_2',
 						'session_expiration' => 2,
-					],
-				],
-			],
-			'session limit' => [
-				'session_limit' => 1,
-				'existing_sessions' => [
-					[
-						'session_id' => 'session_id_1',
+					),
+				),
+			),
+			'session limit'    => array(
+				'session_limit'     => 1,
+				'existing_sessions' => array(
+					array(
+						'session_id'         => 'session_id_1',
 						'session_expiration' => 1,
-					],
-					[
-						'session_id' => 'session_id_2',
+					),
+					array(
+						'session_id'         => 'session_id_2',
 						'session_expiration' => 2,
-					],
-				],
-				'expected' => [
-					[
-						'session_id' => 'session_id_2',
+					),
+				),
+				'expected'          => array(
+					array(
+						'session_id'         => 'session_id_2',
 						'session_expiration' => 2,
-					],
-				],
-			],
-		];
+					),
+				),
+			),
+		);
 	}
 }

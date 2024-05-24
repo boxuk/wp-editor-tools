@@ -21,7 +21,7 @@ class TestPostTypes extends TestCase {
 	 */
 	public function testInit(): void {
 		$post_types = new \Boxuk\BoxWpEditorTools\PostTypes();
-		\WP_Mock::expectActionAdded( 'init', [ $post_types, 'register_post_types' ] );
+		\WP_Mock::expectActionAdded( 'init', array( $post_types, 'register_post_types' ) );
 		$post_types->init();
 		$this->assertConditionsMet();
 	}
@@ -33,20 +33,20 @@ class TestPostTypes extends TestCase {
 	 */
 	public function testRegisterPostTypes(): void {
 
-		$expected_parsed_json = [
-			'labels' => [
-				'name' => 'TestName',
+		$expected_parsed_json = array(
+			'labels'     => array(
+				'name'          => 'TestName',
 				'singular_name' => 'TestName',
-			],
-			'menu_icon' => 'dashicons-admin-post',
-			'taxonomies' => [ 'category', 'post_tag' ],
-		];
+			),
+			'menu_icon'  => 'dashicons-admin-post',
+			'taxonomies' => array( 'category', 'post_tag' ),
+		);
 
-		$expected_defaults = [
+		$expected_defaults = array(
 			'show_in_rest' => true,
-			'public' => true,
-			'template' => [],
-		];
+			'public'       => true,
+			'template'     => array(),
+		);
 
 		$expected_parsed_json_with_defaults = array_merge(
 			$expected_parsed_json,
@@ -124,7 +124,7 @@ class TestPostTypes extends TestCase {
 		\WP_Mock::userFunction( 'parse_blocks' )
 			->once()
 			->with( file_get_contents( __DIR__ . '/fixtures/PostTypes/post-type-templates/bar.html' ) )
-			->andReturn( [] );
+			->andReturn( array() );
 
 		$post_types = new \Boxuk\BoxWpEditorTools\PostTypes();
 		$post_types->get_blocks_from_file( 'bar' );
@@ -178,46 +178,46 @@ class TestPostTypes extends TestCase {
 	 * phpcs:ignore NeutronStandard.Functions.LongFunction.LongFunction -- This is a data provider
 	 */
 	public function blocks_to_template_provider(): array { 
-		return [
-			'empty' => [
-				'blocks' => [],
-				'expected' => [],
-			],
-			'invalid' => [
-				'blocks' => [ [ 'foo' => 'bar' ] ],
-				'expected' => [],
-			],
-			'valid' => [
-				'blocks' => [ [ 'blockName' => 'core/paragraph' ] ],
-				'expected' => [ [ 'core/paragraph', [], [] ] ],
-			],
-			'valid-with-attrs' => [
-				'blocks' => [
-					[
+		return array(
+			'empty'                       => array(
+				'blocks'   => array(),
+				'expected' => array(),
+			),
+			'invalid'                     => array(
+				'blocks'   => array( array( 'foo' => 'bar' ) ),
+				'expected' => array(),
+			),
+			'valid'                       => array(
+				'blocks'   => array( array( 'blockName' => 'core/paragraph' ) ),
+				'expected' => array( array( 'core/paragraph', array(), array() ) ),
+			),
+			'valid-with-attrs'            => array(
+				'blocks'   => array(
+					array(
 						'blockName' => 'core/paragraph',
-						'attrs' => [ 'align' => 'left' ],
-					],
-				],
-				'expected' => [ [ 'core/paragraph', [ 'align' => 'left' ], [] ] ],
-			],
-			'valid-with-children' => [
-				'blocks' => [
-					[
-						'blockName' => 'core/paragraph',
-						'innerBlocks' => [ [ 'blockName' => 'core/heading' ] ],
-					],
-				],
-				'expected' => [ [ 'core/paragraph', [], [ [ 'core/heading', [], [] ] ] ] ],
-			],
-			'valid-with-invalid-children' => [
-				'blocks' => [ 
-					[
-						'blockName' => 'core/paragraph',
-						'innerBlocks' => [ [ 'foo' => 'bar' ] ],
-					],
-				],
-				'expected' => [ [ 'core/paragraph', [], [] ] ],
-			],
-		];
+						'attrs'     => array( 'align' => 'left' ),
+					),
+				),
+				'expected' => array( array( 'core/paragraph', array( 'align' => 'left' ), array() ) ),
+			),
+			'valid-with-children'         => array(
+				'blocks'   => array(
+					array(
+						'blockName'   => 'core/paragraph',
+						'innerBlocks' => array( array( 'blockName' => 'core/heading' ) ),
+					),
+				),
+				'expected' => array( array( 'core/paragraph', array(), array( array( 'core/heading', array(), array() ) ) ) ),
+			),
+			'valid-with-invalid-children' => array(
+				'blocks'   => array( 
+					array(
+						'blockName'   => 'core/paragraph',
+						'innerBlocks' => array( array( 'foo' => 'bar' ) ),
+					),
+				),
+				'expected' => array( array( 'core/paragraph', array(), array() ) ),
+			),
+		);
 	}
 }

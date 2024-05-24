@@ -23,9 +23,9 @@ class TestUserLogin extends TestCase {
 		
 		$user_login = new UserLogin();
 
-		\WP_Mock::expectFilterAdded( 'map_meta_cap', [ $user_login, 'restrict_super_admins' ], 10, 2 );
-		\WP_Mock::expectActionAdded( 'login_init', [ $user_login, 'restrict_login_by_username' ] );
-		\WP_Mock::expectFilterAdded( 'show_password_fields', [ $user_login, 'show_password_fields' ], 10, 2 );
+		\WP_Mock::expectFilterAdded( 'map_meta_cap', array( $user_login, 'restrict_super_admins' ), 10, 2 );
+		\WP_Mock::expectActionAdded( 'login_init', array( $user_login, 'restrict_login_by_username' ) );
+		\WP_Mock::expectFilterAdded( 'show_password_fields', array( $user_login, 'show_password_fields' ), 10, 2 );
 
 		$user_login->init();
 
@@ -45,7 +45,7 @@ class TestUserLogin extends TestCase {
 	public function test_restrict_super_admins( string $cap, array $expected ): void {
 		$user_login = new UserLogin();
 
-		$this->assertEquals( $expected, $user_login->restrict_super_admins( [], $cap ) );
+		$this->assertEquals( $expected, $user_login->restrict_super_admins( array(), $cap ) );
 	}
 
 	/**
@@ -54,10 +54,10 @@ class TestUserLogin extends TestCase {
 	 * @return array
 	 */
 	public function restrict_super_admins_provider(): array {
-		return [ 
-			'should_restrict' => [ 'create_users', [ 'do_not_allow' ] ],
-			'should_not_restrict' => [ 'edit_posts', [] ],
-		];
+		return array( 
+			'should_restrict'     => array( 'create_users', array( 'do_not_allow' ) ),
+			'should_not_restrict' => array( 'edit_posts', array() ),
+		);
 	}
 
 	/**
@@ -88,7 +88,7 @@ class TestUserLogin extends TestCase {
 	public function test_show_password_fields( bool $value, int $user_id, int $current_id, bool $expected ): void {
 		$user_login = new UserLogin();
 
-		$user = Mockery::mock( 'WP_User' );
+		$user     = Mockery::mock( 'WP_User' );
 		$user->ID = $user_id;
 
 		\WP_Mock::userFunction( 'get_current_user_id' )->once()->andReturn( $current_id );
@@ -102,11 +102,11 @@ class TestUserLogin extends TestCase {
 	 * @return array
 	 */
 	public function show_password_fields_provider(): array {
-		return [
-			[ true, 1, 1, true ],
-			[ true, 1, 2, false ],
-			[ false, 1, 1, false ],
-			[ false, 1, 2, false ],
-		];
+		return array(
+			array( true, 1, 1, true ),
+			array( true, 1, 2, false ),
+			array( false, 1, 1, false ),
+			array( false, 1, 2, false ),
+		);
 	}
 }

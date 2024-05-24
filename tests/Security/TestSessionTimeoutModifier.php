@@ -35,7 +35,7 @@ class TestSessionTimeoutModifier extends TestCase {
 	 * @return void
 	 */
 	public function test_init(): void {
-		\WP_Mock::expectFilterAdded( 'auth_cookie_expiration', [ $this->sut, 'auth_cookie_expiration_filter' ], 99, 3 );
+		\WP_Mock::expectFilterAdded( 'auth_cookie_expiration', array( $this->sut, 'auth_cookie_expiration_filter' ), 99, 3 );
 
 		$this->sut->init();
 
@@ -62,9 +62,9 @@ class TestSessionTimeoutModifier extends TestCase {
 	 * @return array
 	 */
 	public function auth_cookie_expiration_filter_provider(): array {
-		return [
-			[ true, 200 ],
-			[ false, 36000 ],
-		];
+		return array(
+			array( true, 200 ),
+			array( false, 36000 ),
+		);
 	}
 }

@@ -40,7 +40,22 @@ class TestTemplatePersistence extends TestCase {
 	 * @return void
 	 */
 	public function test_init(): void { 
-		\WP_Mock::expectActionAdded( 'save_post', [ $this->class_in_test, 'persist_template' ], 10, 2 );
+		\WP_Mock::expectActionAdded( 'save_post', array( $this->class_in_test, 'persist_template' ), 10, 2 );
+		$this->class_in_test->init();
+		$this->assertConditionsMet();
+	}
+
+	/**
+	 * Test init with disabled filter
+	 * 
+	 * @return void
+	 */
+	public function test_init_with_disabled_filter(): void {
+		\WP_Mock::onFilter( 'boxuk_disable_template_persistence' )
+			->with( false )
+			->reply( true );
+
+		\WP_Mock::expectActionNotAdded( 'save_post', array( $this->class_in_test, 'persist_template' ), 10, 2 );
 		$this->class_in_test->init();
 		$this->assertConditionsMet();
 	}
@@ -87,23 +102,23 @@ class TestTemplatePersistence extends TestCase {
 	 * @return array
 	 */
 	protected function persistTemplateDataProvider(): array { 
-		return [
-			'invalid_post_type' => [
-				'post' => $this->getMockPost( 'post' ),
+		return array(
+			'invalid_post_type' => array(
+				'post'                  => $this->getMockPost( 'post' ),
 				'expect_template_write' => false,
-				'template_path' => false,
-			],
-			'template' => [
-				'post' => $this->getMockPost( 'wp_template' ),
+				'template_path'         => false,
+			),
+			'template'          => array(
+				'post'                  => $this->getMockPost( 'wp_template' ),
 				'expect_template_write' => true,
-				'template_path' => '/templates/test.html',
-			],
-			'template_part' => [
-				'post' => $this->getMockPost( 'wp_template_part' ),
+				'template_path'         => '/templates/test.html',
+			),
+			'template_part'     => array(
+				'post'                  => $this->getMockPost( 'wp_template_part' ),
 				'expect_template_write' => true,
-				'template_path' => '/parts/test.html',
-			],
-		];
+				'template_path'         => '/parts/test.html',
+			),
+		);
 	}
 
 	/**
@@ -114,11 +129,15 @@ class TestTemplatePersistence extends TestCase {
 	 * @return \WP_Post
 	 */
 	private function getMockPost( string $post_type ): \WP_Post { 
-
-		$post = Mockery::mock( 'WP_Post' );
-		$post->ID = 0; 
-		$post->post_type = $post_type; 
-		$post->post_name = 'test';
+		/**
+		 * Post (Mocked)
+		 * 
+		 * @var \WP_Post $post Post (Mocked) 
+		 */
+		$post               = Mockery::mock( 'WP_Post' );
+		$post->ID           = 0; 
+		$post->post_type    = $post_type; 
+		$post->post_name    = 'test';
 		$post->post_content = 'test';
 
 		return $post;

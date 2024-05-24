@@ -9,7 +9,6 @@ declare( strict_types=1 );
 
 namespace Boxuk\BoxWpEditorTools\Security;
 
-
 /**
  * Class UserLogin
  */
@@ -21,9 +20,9 @@ class UserLogin {
 	 * @return void
 	 */
 	public function init(): void {
-		add_filter( 'map_meta_cap', [ $this, 'restrict_super_admins' ], 10, 2 );
-		add_action( 'login_init', [ $this, 'restrict_login_by_username' ] );
-		add_filter( 'show_password_fields', [ $this, 'show_password_fields' ], 10, 2 );
+		add_filter( 'map_meta_cap', array( $this, 'restrict_super_admins' ), 10, 2 );
+		add_action( 'login_init', array( $this, 'restrict_login_by_username' ) );
+		add_filter( 'show_password_fields', array( $this, 'show_password_fields' ), 10, 2 );
 	}
 
 	/**

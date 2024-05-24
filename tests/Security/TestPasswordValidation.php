@@ -23,10 +23,10 @@ class TestPasswordValidation extends TestCase {
 		
 		$password_validation = new PasswordValidation();
 
-		\WP_Mock::expectActionAdded( 'user_profile_update_errors', [ $password_validation, 'user_profile_update_errors' ] );
-		\WP_Mock::expectActionAdded( 'validate_password_reset', [ $password_validation, 'user_profile_update_errors' ] );
-		\WP_Mock::expectActionAdded( 'registration_errors', [ $password_validation, 'user_profile_update_errors' ] );
-		\WP_Mock::expectFilterAdded( 'password_hint', [ $password_validation, 'password_hint' ] );
+		\WP_Mock::expectActionAdded( 'user_profile_update_errors', array( $password_validation, 'user_profile_update_errors' ) );
+		\WP_Mock::expectActionAdded( 'validate_password_reset', array( $password_validation, 'user_profile_update_errors' ) );
+		\WP_Mock::expectActionAdded( 'registration_errors', array( $password_validation, 'user_profile_update_errors' ) );
+		\WP_Mock::expectFilterAdded( 'password_hint', array( $password_validation, 'password_hint' ) );
 
 		$password_validation->init();
 
@@ -66,47 +66,47 @@ class TestPasswordValidation extends TestCase {
 	 * @return array
 	 */
 	public function user_profile_update_errors_provider(): array {
-		return [
-			'password too short' => [
-				'password' => 'test',
-				'expect_errors' => [
+		return array(
+			'password too short' => array(
+				'password'      => 'test',
+				'expect_errors' => array(
 					'This value is too short. It should have 10 characters or more.',
 					'Password must contain at least one number.',
 					'Password must contain at least one uppercase letter.',
-				],
-			],
-			'password too long' => [
-				'password' => 'testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest',
-				'expect_errors' => [
+				),
+			),
+			'password too long'  => array(
+				'password'      => 'testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest',
+				'expect_errors' => array(
 					'This value is too long. It should have 72 characters or less.',
 					'Password must contain at least one uppercase letter.',
 					'Password must contain at least one number.',
-				],
-			],
-			'no number' => [ 
+				),
+			),
+			'no number'          => array( 
 				'testtesttest',
-				[
+				array(
 					'Password must contain at least one number.',
 					'Password must contain at least one uppercase letter.',
-				],
-			],
-			'no uppercase' => [ 
+				),
+			),
+			'no uppercase'       => array( 
 				'testtesttest1',
-				[
+				array(
 					'Password must contain at least one uppercase letter.',
-				],
-			],
-			'no lowercase' => [ 
+				),
+			),
+			'no lowercase'       => array( 
 				'TESTTESTTEST1',
-				[
+				array(
 					'Password must contain at least one lowercase letter.',
-				],
-			],
-			'valid password' => [ 
+				),
+			),
+			'valid password'     => array( 
 				'Testtesttest1',
-				[],
-			],
-		];
+				array(),
+			),
+		);
 	}
 
 	/**
