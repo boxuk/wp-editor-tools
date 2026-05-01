@@ -1,4 +1,4 @@
-# Box WordPress Editor Tools
+# Box UK WordPress Editor Tools
 
 A collection of tools for modifying the WordPress Editor. 
 
